@@ -1,49 +1,19 @@
-local Camera = workspace.CurrentCamera
-Holding = false
-function findGoals()
-    for i, v in pairs(workspace:GetDescendants()) do
-        if v.Name == 'yeah' then
-            v.Parent = workspace
-            v.Position += Vector3.new(2.623, 1, 0)
-        end
-    end
-end
-local function findClosestPart(position)
-    local closestPart, closestPartMagnitude
-    local tmpMagnitude
-    for i, v in pairs(workspace:GetChildren()) do
-        if v.Name == 'yeah' then
-            if closestPart then
-                tmpMagnitude = (position - v.Position).magnitude
-                if tmpMagnitude < closestPartMagnitude then
-                    closestPart = v
-                    closestPartMagnitude = tmpMagnitude
-                end
-            else
-                closestPart = v
-                closestPartMagnitude = (position - v.Position).magnitude
-            end
-        end
-    end
-    return closestPart
-end
-findGoals()
 local UIS = game:GetService('UserInputService')
-UIS.InputBegan:connect(function(Input, GPE)
-    if not GPE and Input.KeyCode == Enum.KeyCode.X then
-        local lookthat = findClosestPart(game.Players.LocalPlayer.Character.Torso.Position)
-        Holding = true
-        repeat
-            wait(0.01)
-        Camera.CFrame = CFrame.new(Camera.CFrame.p, lookthat.Position + Vector3.new(0, 85, 0)) 
-        until Holding == false
-    end
-end)
+local plr = game.Players.LocalPlayer
+local Char = plr.Character or plr.CharacterAded:Wait()
+local Key = 'R'
+UIS.InputBegan:Connect(function(Input, IsTyping)
+if IsTyping then return end
+local KeyPressed = Input.KeyCode
+if KeyPressed == Enum.KeyCode[Key] then
+    local obj = game.workspace:WaitForChild("Basketball").Handle
+    local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position).magnitude
+  
+  if magnitude < 120 then
+    obj.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+  else
+    warn("OCM HUB NOTIFICATIONS - You aren't close enough to a basketball to do that.")
 
-UIS.InputEnded:connect(function(Input, GPE)
-    if not GPE and Input.KeyCode == Enum.KeyCode.X then
-        Holding = false
-    end
+end
+end
 end)
-
- I=0
